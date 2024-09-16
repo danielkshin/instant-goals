@@ -15,9 +15,7 @@ function App() {
   useEffect(() => {
     const date = formatDate(new Date());
     const fetchLeagues = async () => {
-      const response = await fetch(
-        `https://corsproxy.io/?https://www.fotmob.com/api/matches?date=${date}`
-      ); // temp solution
+      const response = await fetch(`/.netlify/functions/matches?date=${date}`);
       const json = await response.json();
       setLeagues(json.leagues.filter((a) => [47, 53, 54, 87].includes(a.id)));
     };
