@@ -5,10 +5,18 @@ function App() {
   const [leagues, setLeagues] = useState([]);
   const [links, setLinks] = useState({});
 
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}${month}${day}`;
+  };
+
   useEffect(() => {
+    const date = formatDate(new Date());
     const fetchLeagues = async () => {
       const response = await fetch(
-        "https://corsproxy.io/?https://www.fotmob.com/api/matches?date=20240915"
+        `https://corsproxy.io/?https://www.fotmob.com/api/matches?date=${date}`
       ); // temp solution
       const json = await response.json();
       setLeagues(json.leagues.filter((a) => [47, 53, 54, 87].includes(a.id)));
