@@ -42,10 +42,14 @@ function App() {
         // child.data.title.includes("]") &&
         // child.data.title.includes("-") &&
         // child.data.title.includes("'") &&
+        // check link
         (child.data.url.includes("/v/") ||
           child.data.url.includes("/c/") ||
           child.data.url.includes("v.redd.it") ||
           child.data.url.includes("goal")) &&
+        // no crossposts
+        !child.data.hasOwnProperty("crosspost_parent") &&
+        // posted on current date
         new Date(child.data.created * 1000).toDateString() ===
           new Date().toDateString()
       ) {
