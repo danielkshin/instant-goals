@@ -14,38 +14,46 @@ export default function Match(props) {
   const loadLinks = async () => {
     setLoadingLinks(true);
     setLinks([]);
+
     let newLinks = [];
     let response;
-    try {
-      response = await fetch(
-        `https://www.reddit.com/r/soccer/search.json?q=(${home.name}) OR (${away.name}) OR (${home.longName}) OR (${away.longName})&f=flair_name%3A"Media"&restrict_sr=on&sort=new&limit=50`
-      );
-    } catch (e) {
-      console.log(e);
-    }
-    let json = await response.json();
-    for (let child of json.data.children) {
-      if (
-        // child.data.title.includes("[") &&
-        // child.data.title.includes("]") &&
-        // child.data.title.includes("-") &&
-        // child.data.title.includes("'") &&
-        // check link
-        (child.data.url.includes("/v/") ||
-          child.data.url.includes("/c/") ||
-          child.data.url.includes("v.redd.it") ||
-          child.data.url.includes("goal")) &&
-        // no crossposts
-        !child.data.hasOwnProperty("crosspost_parent") &&
-        // posted on current date
-        new Date(child.data.created * 1000).toDateString() ===
-          new Date().toDateString()
-      ) {
-        newLinks.push({
-          title: child.data.title,
-          url: child.data.url,
-          created: child.data.created,
-        });
+    const searchQueries = [home.name, away.name, home.longName, away.longName];
+
+    for (let query of searchQueries) {
+      try {
+        response = await fetch(
+          `https://www.reddit.com/r/soccer/search.json?q=${query}&type=link&sort=new&t=day&restrict_sr=on`
+        );
+      } catch (e) {
+        console.log(e);
+      }
+
+      let json = await response.json();
+      for (let child of json.data.children) {
+        if (
+          // child.data.title.includes("[") &&
+          // child.data.title.includes("]") &&
+          // child.data.title.includes("-") &&
+          // child.data.title.includes("'") &&
+          // check link
+          (child.data.url.includes("/v/") ||
+            child.data.url.includes("/c/") ||
+            child.data.url.includes("v.redd.it") ||
+            child.data.url.includes("goal")) &&
+          // no crossposts
+          !child.data.hasOwnProperty("crosspost_parent") &&
+          // posted on current date
+          new Date(child.data.created * 1000).toDateString() ===
+            new Date().toDateString()
+        ) {
+          if (!newLinks.some((link) => link.url === child.data.url)) {
+            newLinks.push({
+              title: child.data.title,
+              url: child.data.url,
+              created: child.data.created,
+            });
+          }
+        }
       }
     }
     newLinks.reverse();
