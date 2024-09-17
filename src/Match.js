@@ -1,15 +1,22 @@
 import { useState } from "react";
 export default function Match(props) {
-  const [links, setLinks] = useState({});
+  const [links, setLinks] = useState([]);
+  const [show, setShow] = useState(false);
+  const [loadingLinks, setLoadingLinks] = useState(false);
 
   const match = props.match;
+  const home = match.home;
+  const away = match.away;
+  const score = match.status.scoreStr;
 
-  const onAddLinks = async (team1, team2, id) => {
+  const loadLinks = async () => {
+    setLoadingLinks(true);
+    setLinks([]);
     let newLinks = [];
     let response;
     try {
       response = await fetch(
-        `https://www.reddit.com/r/soccer/search.json?q=(${team1.name}) OR (${team2.name}) OR (${team1.longName}) OR (${team2.longName})&f=flair_name%3A"Media"&restrict_sr=on&sort=new&limit=50`
+        `https://www.reddit.com/r/soccer/search.json?q=(${home.name}) OR (${away.name}) OR (${home.longName}) OR (${away.longName})&f=flair_name%3A"Media"&restrict_sr=on&sort=new&limit=50`
       );
     } catch (e) {
       console.log(e);
@@ -39,35 +46,44 @@ export default function Match(props) {
         });
       }
     }
-    if (newLinks.length > 0) {
-      newLinks.reverse();
-      setLinks({ [id]: newLinks, ...links });
+    newLinks.reverse();
+    setLinks(newLinks);
+    setLoadingLinks(false);
+  };
+
+  const showLinks = () => {
+    if (!show) {
+      loadLinks();
+    }
+    setShow((show) => !show);
+  };
+
+  const displayLinks = () => {
+    if (links.length > 0) {
+      return links.map((link) => (
+        <div key={link.url}>
+          <a href={link.url} target="_blank" rel="noreferrer">
+            {link.title}
+          </a>
+        </div>
+      ));
+    } else {
+      return (
+        <div>
+          <p>None found</p>
+        </div>
+      );
     }
   };
 
   return (
     <div>
-      <p onClick={() => onAddLinks(match.home, match.away, match.id)}>
+      <p onClick={() => showLinks()}>
         <b>
-          {match.home.name}{" "}
-          {match.status.scoreStr === undefined ? " v " : match.status.scoreStr}{" "}
-          {match.away.name}
+          {home.name} {score === undefined ? " v " : score} {away.name}
         </b>
       </p>
-      {links.hasOwnProperty(match.id)
-        ? links[match.id].map((link) => (
-            <div key={link.title}>
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noreferrer"
-                key={link.url}
-              >
-                {link.title}
-              </a>
-            </div>
-          ))
-        : ""}
+      {show && <div>{!loadingLinks ? displayLinks() : "Loading..."}</div>}
     </div>
   );
 }

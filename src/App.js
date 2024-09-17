@@ -27,7 +27,7 @@ function App() {
     <div className="App">
       {leagues.map((league) => (
         <div key={league.id}>
-          <h1 key={league.name}>{league.name}</h1>
+          <h1>{league.name}</h1>
           {league.matches.map((match) => (
             <Match match={match} key={match.id} />
           ))}
