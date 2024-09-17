@@ -33,52 +33,57 @@ export default function Match(props) {
 
     let newLinks = [];
 
-    // Search r/soccer by new (instant updates)
-    const teamNames = new Set([
-      home.name,
-      away.name,
-      home.longName,
-      away.longName,
-      ...home.name.split(" "),
-      ...away.name.split(" "),
-      ...home.longName.split(" "),
-      ...away.longName.split(" "),
-    ]);
-    const response = await fetch("https://old.reddit.com/r/soccer/new.json");
-    const json = await response.json();
-    for (const child of json.data.children) {
-      if (filterLinks(child.data)) {
-        if ([...teamNames].some((query) => child.data.title.includes(query))) {
-          newLinks.push({
-            title: child.data.title,
-            url: child.data.url,
-            created: child.data.created,
-          });
-        }
-      }
-    }
-
-    const searchQueries = new Set([
-      home.name,
-      away.name,
-      home.longName,
-      away.longName,
-    ]);
-    // Search r/soccer by Reddit's search API (delayed updates)
-    for (const query of searchQueries) {
-      const response = await fetch(
-        `https://old.reddit.com/r/soccer/search.json?q=${query}&type=link&sort=new&t=day&restrict_sr=on`
-      );
+    // Search r/soccer by new (instant updates) during the game
+    if (
+      Date.now() > Date.parse(match.status.utcTime) &&
+      Date.now() < Date.parse(match.status.utcTime) + 5400000
+    ) {
+      const teamNames = new Set([
+        home.name,
+        away.name,
+        home.longName,
+        away.longName,
+        ...home.name.split(" "),
+        ...away.name.split(" "),
+        ...home.longName.split(" "),
+        ...away.longName.split(" "),
+      ]);
+      const response = await fetch("https://old.reddit.com/r/soccer/new.json");
       const json = await response.json();
-
       for (const child of json.data.children) {
         if (filterLinks(child.data)) {
-          if (!newLinks.some((link) => link.url === child.data.url)) {
+          if ([...teamNames].some((name) => child.data.title.includes(name))) {
             newLinks.push({
               title: child.data.title,
               url: child.data.url,
               created: child.data.created,
             });
+          }
+        }
+      }
+    }
+
+    // Search r/soccer by Reddit's search API (delayed updates) after the game
+    if (Date.now() > Date.parse(match.status.utcTime)) {
+      const searchQueries = [
+        `${home.name} OR ${home.longName}`,
+        `${away.name} OR ${away.longName}`,
+      ];
+      for (const query of searchQueries) {
+        const response = await fetch(
+          `https://old.reddit.com/r/soccer/search.json?q=${query}&type=link&sort=new&t=day&restrict_sr=on`
+        );
+        const json = await response.json();
+
+        for (const child of json.data.children) {
+          if (filterLinks(child.data)) {
+            if (!newLinks.some((link) => link.url === child.data.url)) {
+              newLinks.push({
+                title: child.data.title,
+                url: child.data.url,
+                created: child.data.created,
+              });
+            }
           }
         }
       }
