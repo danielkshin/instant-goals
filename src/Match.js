@@ -10,7 +10,6 @@ export default function Match(props) {
   const match = props.match;
   const home = match.home;
   const away = match.away;
-  const score = match.status.scoreStr;
 
   const loadLinks = async () => {
     setLoadingLinks(true);
@@ -67,7 +66,13 @@ export default function Match(props) {
         onClick={() => showLinks()}
         className={!show ? "match" : "match active"}
       >
-        {home.name} {score === undefined ? " v " : score} {away.name}
+        <span className="home">{home.name}</span>
+        <span className="score">
+          <span>{home.score}</span>
+          <span>-</span>
+          <span>{away.score}</span>
+        </span>
+        <span className="away">{away.name}</span>
       </div>
       {show && (
         <div className="links">

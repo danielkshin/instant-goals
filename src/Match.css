@@ -1,8 +1,26 @@
 .match {
+  display: flex;
+  justify-content: center;
   padding: 20px;
   border-radius: 10px;
   background-color: #efefef;
   font-weight: bold;
+}
+
+.match span {
+  flex: 1;
+}
+
+.match .home {
+  text-align: left;
+}
+
+.match .away {
+  text-align: right;
+}
+
+.score span {
+  margin: 5px;
 }
 
 .match.active {
