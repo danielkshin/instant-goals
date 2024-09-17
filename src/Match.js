@@ -82,11 +82,9 @@ export default function Match(props) {
           alt={`${away.name} Logo`}
         />
       </div>
-      {show && (
-        <div className="links">
-          {!loadingLinks ? <Links links={links} /> : <p>Loading...</p>}
-        </div>
-      )}
+      <div className={!show ? "links" : "links active"}>
+        {!loadingLinks ? <Links links={links} /> : <p>Loading...</p>}
+      </div>
     </div>
   );
 }
