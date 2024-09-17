@@ -11,41 +11,42 @@ export default function Match(props) {
   const home = match.home;
   const away = match.away;
 
+  const filterLinks = (data) => {
+    return (
+      // exclude U19
+      !data.title.includes("U19") &&
+      // check link
+      (data.url.includes("/v/") ||
+        data.url.includes("/c/") ||
+        data.url.includes("v.redd.it") ||
+        data.url.includes("goal")) &&
+      // no crossposts
+      !data.hasOwnProperty("crosspost_parent") &&
+      // posted on current date
+      new Date(data.created * 1000).toDateString() === new Date().toDateString()
+    );
+  };
+
   const loadLinks = async () => {
     setLoadingLinks(true);
     setLinks([]);
 
     let newLinks = [];
-    let response;
-    const searchQueries = [home.name, away.name, home.longName, away.longName];
+    const searchQueries = new Set([
+      home.name,
+      away.name,
+      home.longName,
+      away.longName,
+    ]);
 
-    for (let query of searchQueries) {
-      try {
-        response = await fetch(
-          `https://www.reddit.com/r/soccer/search.json?q=${query}&type=link&sort=new&t=day&restrict_sr=on`
-        );
-      } catch (e) {
-        console.log(e);
-      }
+    for (const query of searchQueries) {
+      const response = await fetch(
+        `https://www.reddit.com/r/soccer/search.json?q=${query}&type=link&sort=new&t=day&restrict_sr=on`
+      );
+      const json = await response.json();
 
-      let json = await response.json();
-      for (let child of json.data.children) {
-        if (
-          // child.data.title.includes("[") &&
-          // child.data.title.includes("]") &&
-          // child.data.title.includes("-") &&
-          // child.data.title.includes("'") &&
-          // check link
-          (child.data.url.includes("/v/") ||
-            child.data.url.includes("/c/") ||
-            child.data.url.includes("v.redd.it") ||
-            child.data.url.includes("goal")) &&
-          // no crossposts
-          !child.data.hasOwnProperty("crosspost_parent") &&
-          // posted on current date
-          new Date(child.data.created * 1000).toDateString() ===
-            new Date().toDateString()
-        ) {
+      for (const child of json.data.children) {
+        if (filterLinks(child.data)) {
           if (!newLinks.some((link) => link.url === child.data.url)) {
             newLinks.push({
               title: child.data.title,
@@ -63,7 +64,7 @@ export default function Match(props) {
 
   const showLinks = () => {
     if (!show) {
-      loadLinks();
+      loadLinks().catch(console.warn);
     }
     setShow((show) => !show);
   };
