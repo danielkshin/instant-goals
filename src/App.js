@@ -1,5 +1,6 @@
 import "./App.css";
 import Match from "./Match.js";
+import logo from "./assets/logo.png";
 import { useState, useEffect } from "react";
 
 function App() {
@@ -32,6 +33,13 @@ function App() {
 
   return (
     <div className="App">
+      <header>
+        <img src={logo} alt="website logo" />
+        <span>
+          <h1>instant goals</h1>
+          <p>goals and highlights on demand</p>
+        </span>
+      </header>
       {leagues.map((league) => (
         <div className="leagueContainer" key={league.primaryId}>
           <div className="league">
@@ -46,6 +54,16 @@ function App() {
           ))}
         </div>
       ))}
+      <footer>
+        <p>created by</p>
+        <a
+          href="https://danielkshin.github.io/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          daniel shin
+        </a>
+      </footer>
     </div>
   );
 }
