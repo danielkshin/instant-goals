@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Links from "./Links.js";
 export default function Match(props) {
   const [links, setLinks] = useState([]);
   const [show, setShow] = useState(false);
@@ -58,24 +59,6 @@ export default function Match(props) {
     setShow((show) => !show);
   };
 
-  const displayLinks = () => {
-    if (links.length > 0) {
-      return links.map((link) => (
-        <div key={link.url}>
-          <a href={link.url} target="_blank" rel="noreferrer">
-            {link.title}
-          </a>
-        </div>
-      ));
-    } else {
-      return (
-        <div>
-          <p>None found</p>
-        </div>
-      );
-    }
-  };
-
   return (
     <div>
       <p onClick={() => showLinks()}>
@@ -83,7 +66,9 @@ export default function Match(props) {
           {home.name} {score === undefined ? " v " : score} {away.name}
         </b>
       </p>
-      {show && <div>{!loadingLinks ? displayLinks() : "Loading..."}</div>}
+      {show && (
+        <div>{!loadingLinks ? <Links links={links} /> : "Loading..."}</div>
+      )}
     </div>
   );
 }
