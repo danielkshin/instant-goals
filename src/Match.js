@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Links from "./Links.js";
+import "./Match.css";
+
 export default function Match(props) {
   const [links, setLinks] = useState([]);
   const [show, setShow] = useState(false);
@@ -61,13 +63,16 @@ export default function Match(props) {
 
   return (
     <div>
-      <p onClick={() => showLinks()}>
-        <b>
-          {home.name} {score === undefined ? " v " : score} {away.name}
-        </b>
-      </p>
+      <div
+        onClick={() => showLinks()}
+        className={!show ? "match" : "match active"}
+      >
+        {home.name} {score === undefined ? " v " : score} {away.name}
+      </div>
       {show && (
-        <div>{!loadingLinks ? <Links links={links} /> : "Loading..."}</div>
+        <div className="links">
+          {!loadingLinks ? <Links links={links} /> : <p>Loading...</p>}
+        </div>
       )}
     </div>
   );

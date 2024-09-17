@@ -9,7 +9,7 @@ function App() {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
-    return `${year}${month}${day}`;
+    return `${year}${month}${day - 1}`;
   };
 
   useEffect(() => {
@@ -26,8 +26,8 @@ function App() {
   return (
     <div className="App">
       {leagues.map((league) => (
-        <div key={league.id}>
-          <h1>{league.name}</h1>
+        <div className="leagueContainer" key={league.id}>
+          <h2 className="leagueName">{league.name}</h2>
           {league.matches.map((match) => (
             <Match match={match} key={match.id} />
           ))}
