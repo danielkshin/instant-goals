@@ -13,11 +13,18 @@ function App() {
   };
 
   useEffect(() => {
+    const leagueIDs = [
+      42, 44, 47, 48, 50, 53, 54, 55, 73, 74, 77, 87, 130, 132, 133, 134, 138,
+      139, 141, 207, 209, 222, 247, 289, 290, 8924, 9806, 9807, 9808, 9809,
+      10216, 10199, 10195, 10197,
+    ];
     const date = formatDate(new Date());
     const fetchLeagues = async () => {
       const response = await fetch(`/.netlify/functions/matches?date=${date}`);
       const json = await response.json();
-      setLeagues(json.leagues.filter((a) => [47, 53, 54, 87].includes(a.id)));
+      setLeagues(
+        json.leagues.filter((league) => leagueIDs.includes(league.primaryId))
+      );
     };
 
     fetchLeagues().catch(console.warn);
@@ -26,10 +33,10 @@ function App() {
   return (
     <div className="App">
       {leagues.map((league) => (
-        <div className="leagueContainer">
-          <div className="league" key={league.id}>
+        <div className="leagueContainer" key={league.primaryId}>
+          <div className="league">
             <img
-              src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${league.id}.png`}
+              src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${league.primaryId}.png`}
               alt={`${league.name} Logo`}
             />
             <h2>{league.name}</h2>
