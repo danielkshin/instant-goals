@@ -61,3 +61,18 @@
 .link:hover {
   background-color: #dfdfdf;
 }
+
+@media (max-width: 450px) {
+  .match {
+    padding: 15px;
+  }
+
+  .match img {
+    width: 25px;
+    height: 25px;
+  }
+
+  .match span {
+    font-size: 13px;
+  }
+}

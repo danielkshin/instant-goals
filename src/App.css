@@ -32,6 +32,11 @@ body {
 
 @media (max-width: 900px) {
   .leagueContainer {
-    width: 80vw;
+    width: 90vw;
+  }
+
+  .league img {
+    width: 30px;
+    height: 30px;
   }
 }
