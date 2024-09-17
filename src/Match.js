@@ -32,16 +32,42 @@ export default function Match(props) {
     setLinks([]);
 
     let newLinks = [];
+
+    // Search r/soccer by new (instant updates)
+    const teamNames = new Set([
+      home.name,
+      away.name,
+      home.longName,
+      away.longName,
+      ...home.name.split(" "),
+      ...away.name.split(" "),
+      ...home.longName.split(" "),
+      ...away.longName.split(" "),
+    ]);
+    const response = await fetch("https://old.reddit.com/r/soccer/new.json");
+    const json = await response.json();
+    for (const child of json.data.children) {
+      if (filterLinks(child.data)) {
+        if ([...teamNames].some((query) => child.data.title.includes(query))) {
+          newLinks.push({
+            title: child.data.title,
+            url: child.data.url,
+            created: child.data.created,
+          });
+        }
+      }
+    }
+
     const searchQueries = new Set([
       home.name,
       away.name,
       home.longName,
       away.longName,
     ]);
-
+    // Search r/soccer by Reddit's search API (delayed updates)
     for (const query of searchQueries) {
       const response = await fetch(
-        `https://www.reddit.com/r/soccer/search.json?q=${query}&type=link&sort=new&t=day&restrict_sr=on`
+        `https://old.reddit.com/r/soccer/search.json?q=${query}&type=link&sort=new&t=day&restrict_sr=on`
       );
       const json = await response.json();
 
@@ -57,7 +83,10 @@ export default function Match(props) {
         }
       }
     }
-    newLinks.reverse();
+
+    newLinks.sort((a, b) => {
+      return a.created - b.created;
+    });
     setLinks(newLinks);
     setLoadingLinks(false);
   };
