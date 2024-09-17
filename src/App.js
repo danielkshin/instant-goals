@@ -26,8 +26,14 @@ function App() {
   return (
     <div className="App">
       {leagues.map((league) => (
-        <div className="leagueContainer" key={league.id}>
-          <h2 className="leagueName">{league.name}</h2>
+        <div className="leagueContainer">
+          <div className="league" key={league.id}>
+            <img
+              src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${league.id}.png`}
+              alt={`${league.name} Logo`}
+            />
+            <h2>{league.name}</h2>
+          </div>
           {league.matches.map((match) => (
             <Match match={match} key={match.id} />
           ))}
