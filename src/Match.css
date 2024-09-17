@@ -1,10 +1,17 @@
 .match {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 10px;
   padding: 20px;
   border-radius: 10px;
   background-color: #efefef;
   font-weight: bold;
+}
+
+.match img {
+  height: 30px;
+  width: 30px;
 }
 
 .match span {
