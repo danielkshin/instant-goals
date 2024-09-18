@@ -117,11 +117,15 @@ export default function Match(props) {
           alt={`${home.name} Logo`}
         />
         <span className="home">{home.name}</span>
-        <span className="score">
-          <span>{home.score}</span>
-          <span>-</span>
-          <span>{away.score}</span>
-        </span>
+        {match.status.started ? (
+          <span className="score">
+            <span>{home.score}</span>
+            <span>-</span>
+            <span>{away.score}</span>
+          </span>
+        ) : (
+          <span>v</span>
+        )}
         <span className="away">{away.name}</span>
         <img
           src={`https://images.fotmob.com/image_resources/logo/teamlogo/${away.id}.png`}
