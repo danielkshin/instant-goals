@@ -13,8 +13,8 @@ export default function Match(props) {
 
   const filterLinks = (data) => {
     return (
-      // exclude U19
-      !data.title.includes("U19") &&
+      // exclude U19 and women's teams
+      !(data.title.includes("U19") || data.title.includes(" W ")) &&
       // check link
       (data.url.includes("/v/") ||
         data.url.includes("/c/") ||
