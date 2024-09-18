@@ -66,8 +66,8 @@ export default function Match(props) {
     // Search r/soccer by Reddit's search API (delayed updates) after the game
     if (Date.now() > Date.parse(match.status.utcTime)) {
       const searchQueries = [
-        `${home.name} OR ${home.longName}`,
-        `${away.name} OR ${away.longName}`,
+        `"${home.name}"OR"${home.longName}"`,
+        `"${away.name}"OR"${away.longName}"`,
       ];
       for (const query of searchQueries) {
         const response = await fetch(
