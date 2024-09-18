@@ -15,6 +15,6 @@ export default function Links(props) {
       </a>
     ));
   } else {
-    return <p>None found</p>;
+    return <p>Links not found</p>;
   }
 }
