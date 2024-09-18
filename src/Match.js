@@ -98,7 +98,10 @@ export default function Match(props) {
 
   const showLinks = () => {
     if (!show) {
-      loadLinks().catch(console.warn);
+      loadLinks().catch((e) => {
+        console.error(e);
+        props.setError(true);
+      });
     }
     setShow((show) => !show);
   };

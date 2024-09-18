@@ -1,10 +1,12 @@
 import "./App.css";
 import Match from "./Match.js";
+import Error from "./Error.js";
 import logo from "./assets/logo.png";
 import { useState, useEffect } from "react";
 
 function App() {
   const [leagues, setLeagues] = useState([]);
+  const [error, setError] = useState(false);
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -28,9 +30,13 @@ function App() {
       );
     };
 
-    fetchLeagues().catch(console.warn);
+    fetchLeagues().catch((e) => {
+      console.error(e);
+      setError(true);
+    });
   }, []);
 
+  if (error) return <Error />;
   return (
     <div className="App">
       <header>
@@ -50,7 +56,7 @@ function App() {
             <h2>{league.name}</h2>
           </div>
           {league.matches.map((match) => (
-            <Match match={match} key={match.id} />
+            <Match match={match} setError={setError} key={match.id} />
           ))}
         </div>
       ))}
