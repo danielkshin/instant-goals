@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Links from "./Links.js";
 import "./Match.css";
+import fotmob from "./assets/fotmob.png";
+import reload from "./assets/reload.png";
 
 export default function Match(props) {
   const [links, setLinks] = useState([]);
@@ -142,9 +144,11 @@ export default function Match(props) {
               className="link"
             >
               View on FotMob
+              <img src={fotmob} alt="FotMob logo" />
             </a>
             <p onClick={loadLinks} className="link">
-              Reload Links
+              Reload links
+              <img src={reload} alt="Reload icon" />
             </p>
           </span>
           {!loadingLinks ? (
