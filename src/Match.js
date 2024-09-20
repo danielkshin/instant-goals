@@ -133,7 +133,26 @@ export default function Match(props) {
         />
       </div>
       <div className={!show ? "links" : "links active"}>
-        {!loadingLinks ? <Links links={links} /> : <p>Loading...</p>}
+        <>
+          <span>
+            <a
+              href={`https://www.fotmob.com/matches/match/id#${match.id}`}
+              target="_blank"
+              rel="noreferrer"
+              className="link"
+            >
+              View on FotMob
+            </a>
+            <p onClick={loadLinks} className="link">
+              Reload Links
+            </p>
+          </span>
+          {!loadingLinks ? (
+            <Links links={links} loadLinks={loadLinks} />
+          ) : (
+            <p>Loading links...</p>
+          )}
+        </>
       </div>
     </div>
   );
