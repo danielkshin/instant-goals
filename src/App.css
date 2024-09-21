@@ -1,6 +1,15 @@
+:root {
+  --background: #f8f8f8;
+  --hover: #dfdfdf;
+  --text: #080808;
+  --match: #efefef;
+  --links: #e8e8e8;
+}
+
 body {
-  background-color: #f8f8f8;
+  background-color: var(--background);
   height: 100%;
+  color: var(--text);
 }
 
 .App {
@@ -71,7 +80,7 @@ footer {
 footer a {
   text-decoration: none;
   font-weight: bold;
-  color: #000000;
+  color: inherit;
 }
 
 @media (max-width: 900px) {

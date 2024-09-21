@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Links from "./Links.js";
 import "./Match.css";
-import fotmob from "./assets/fotmob.png";
 import reload from "./assets/reload.png";
 
 export default function Match(props) {
