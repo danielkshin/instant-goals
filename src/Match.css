@@ -7,7 +7,7 @@
   border-radius: 10px;
   background-color: var(--match);
   font-weight: bold;
-  transition: 0.3s;
+  transition: 0.5s;
 }
 
 .match img {
@@ -46,7 +46,7 @@
   display: none;
   opacity: 0;
   transition-property: display opacity;
-  transition-duration: 0.3s;
+  transition-duration: 0.5s;
   transition-behavior: allow-discrete;
 }
 
@@ -70,13 +70,20 @@
   padding: 20px;
   margin: 0px;
   border-radius: 10px;
-  color: inherit;
-  transition: 0.3s;
+  color: var(--text);
+  transition-duration: inherit;
 }
 
 .link img {
   width: 25px;
   height: 25px;
+  transition-duration: 0.5s;
+}
+
+[theme="dark"] {
+  .link img {
+    filter: invert(1);
+  }
 }
 
 .link:hover,

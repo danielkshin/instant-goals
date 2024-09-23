@@ -2,11 +2,13 @@ import "./App.css";
 import Match from "./Match.js";
 import Error from "./Error.js";
 import logo from "./assets/logo.png";
+import theme from "./assets/theme.png";
 import { useState, useEffect } from "react";
 
 function App() {
   const [leagues, setLeagues] = useState([]);
   const [error, setError] = useState(false);
+  const [dark, setDark] = useState(false);
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -38,7 +40,7 @@ function App() {
 
   if (error) return <Error />;
   return (
-    <div className="App">
+    <div className="App" theme={dark ? "dark" : ""}>
       <header>
         <img src={logo} alt="website logo" />
         <span>
@@ -46,11 +48,19 @@ function App() {
           <p>goals and highlights on demand</p>
         </span>
       </header>
+      <img
+        className="theme"
+        src={theme}
+        alt="Theme icon"
+        onClick={() => setDark(!dark)}
+      />
       {leagues.map((league) => (
         <div className="leagueContainer" key={league.primaryId}>
           <div className="league">
             <img
-              src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${league.primaryId}.png`}
+              src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${
+                dark ? "dark/" : ""
+              }${league.primaryId}.png`}
               alt={`${league.name} Logo`}
             />
             <h2>{league.name}</h2>
