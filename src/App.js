@@ -8,8 +8,7 @@ import { useState, useEffect } from "react";
 function App() {
   const [leagues, setLeagues] = useState([]);
   const [error, setError] = useState(false);
-  const [dark, setDark] = useState(false);
-
+  const [dark, setDark] = useState(localStorage.getItem("dark") === "true");
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -38,6 +37,11 @@ function App() {
     });
   }, []);
 
+  const changeTheme = () => {
+    localStorage.setItem("dark", !dark);
+    setDark(!dark);
+  };
+
   if (error) return <Error />;
   return (
     <div className="App" theme={dark ? "dark" : ""}>
@@ -52,7 +56,7 @@ function App() {
         className="theme"
         src={theme}
         alt="Theme icon"
-        onClick={() => setDark(!dark)}
+        onClick={changeTheme}
       />
       {leagues.map((league) => (
         <div className="leagueContainer" key={league.primaryId}>
