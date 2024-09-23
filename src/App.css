@@ -111,6 +111,13 @@ footer a {
 }
 
 @media (max-width: 900px) {
+  .theme {
+    left: 5px;
+    top: 5px;
+    width: 25px;
+    height: 25px;
+  }
+
   .leagueContainer {
     width: 90vw;
   }
