@@ -1,7 +1,8 @@
 import "./App.css";
+import Header from "./Header.js";
 import Match from "./Match.js";
 import Error from "./Error.js";
-import logo from "./assets/logo.png";
+import Footer from "./Footer.js";
 import theme from "./assets/theme.png";
 import { useState, useEffect } from "react";
 
@@ -45,13 +46,7 @@ function App() {
   if (error) return <Error />;
   return (
     <div className="App" theme={dark ? "dark" : ""}>
-      <header>
-        <img src={logo} alt="website logo" />
-        <span>
-          <h1>instant goals</h1>
-          <p>goals and highlights on demand</p>
-        </span>
-      </header>
+      <Header />
       <img
         className="theme"
         src={theme}
@@ -74,16 +69,7 @@ function App() {
           ))}
         </div>
       ))}
-      <footer>
-        <p>created by</p>
-        <a
-          href="https://danielkshin.github.io/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          daniel shin
-        </a>
-      </footer>
+      <Footer />
     </div>
   );
 }
