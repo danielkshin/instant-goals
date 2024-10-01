@@ -40,14 +40,18 @@ body {
 
 .theme {
   position: fixed;
-  left: 10px;
-  top: 10px;
+  right: 10px;
+  bottom: 10px;
   width: 30px;
   height: 30px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #eaeaea;
   transition-duration: 0.5s;
 }
 
 .theme:hover {
+  background-color: #d7d7d7;
   cursor: pointer;
 }
 
@@ -115,8 +119,6 @@ footer a {
 
 @media (max-width: 900px) {
   .theme {
-    left: 5px;
-    top: 5px;
     width: 25px;
     height: 25px;
   }
