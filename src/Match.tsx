@@ -41,8 +41,12 @@ const Match = (props: MatchProps) => {
 
   const filterLinks = (data: any): boolean => {
     return (
-      // exclude U19 and women's teams
-      !(data.title.includes('U19') || data.title.includes(' W ')) &&
+      // exclude U19, U21, and women's teams
+      !(
+        data.title.includes('U19') ||
+        data.title.includes('U21') ||
+        data.title.includes(' W ')
+      ) &&
       // check link
       (data.url.includes('/v/') ||
         data.url.includes('/c/') ||
