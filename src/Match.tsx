@@ -1,38 +1,65 @@
-import { useState } from "react";
-import Links from "./Links.js";
-import "./Match.css";
-import reload from "./assets/reload.png";
+import { useState } from 'react';
+import Links from './Links';
+import './Match.css';
+import reload from './assets/reload.png';
 
-export default function Match(props) {
-  const [links, setLinks] = useState([]);
-  const [show, setShow] = useState(false);
-  const [loadingLinks, setLoadingLinks] = useState(false);
+interface MatchProps {
+  match: MatchData;
+  setError: (error: boolean) => void;
+}
+
+interface MatchData {
+  home: Team;
+  away: Team;
+  status: {
+    utcTime: string;
+    started: boolean;
+  };
+}
+
+interface Team {
+  id: number;
+  name: string;
+  longName: string;
+  score?: number;
+}
+
+interface Link {
+  title: string;
+  url: string;
+  created: number;
+}
+
+const Match = (props: MatchProps) => {
+  const [links, setLinks] = useState<Link[]>([]);
+  const [show, setShow] = useState<boolean>(false);
+  const [loadingLinks, setLoadingLinks] = useState<boolean>(false);
 
   const match = props.match;
   const home = match.home;
   const away = match.away;
 
-  const filterLinks = (data) => {
+  const filterLinks = (data: any): boolean => {
     return (
       // exclude U19 and women's teams
-      !(data.title.includes("U19") || data.title.includes(" W ")) &&
+      !(data.title.includes('U19') || data.title.includes(' W ')) &&
       // check link
-      (data.url.includes("/v/") ||
-        data.url.includes("/c/") ||
-        data.url.includes("v.redd.it") ||
-        data.url.includes("goal")) &&
+      (data.url.includes('/v/') ||
+        data.url.includes('/c/') ||
+        data.url.includes('v.redd.it') ||
+        data.url.includes('goal')) &&
       // no crossposts
-      !data.hasOwnProperty("crosspost_parent") &&
+      !data.hasOwnProperty('crosspost_parent') &&
       // posted on current date
       new Date(data.created * 1000).toDateString() === new Date().toDateString()
     );
   };
 
-  const loadLinks = async () => {
+  const loadLinks = async (): Promise<void> => {
     setLoadingLinks(true);
     setLinks([]);
 
-    let newLinks = [];
+    let newLinks: Link[] = [];
 
     // Search r/soccer by new (instant updates) during the game
     if (
@@ -44,12 +71,12 @@ export default function Match(props) {
         away.name,
         home.longName,
         away.longName,
-        ...home.name.split(" "),
-        ...away.name.split(" "),
-        ...home.longName.split(" "),
-        ...away.longName.split(" "),
+        ...home.name.split(' '),
+        ...away.name.split(' '),
+        ...home.longName.split(' '),
+        ...away.longName.split(' '),
       ]);
-      const response = await fetch("https://old.reddit.com/r/soccer/new.json");
+      const response = await fetch('https://old.reddit.com/r/soccer/new.json');
       const json = await response.json();
       for (const child of json.data.children) {
         if (filterLinks(child.data)) {
@@ -97,7 +124,7 @@ export default function Match(props) {
     setLoadingLinks(false);
   };
 
-  const showLinks = () => {
+  const showLinks = (): void => {
     if (!show) {
       loadLinks().catch((e) => {
         console.error(e);
@@ -111,7 +138,7 @@ export default function Match(props) {
     <div>
       <div
         onClick={() => showLinks()}
-        className={!show ? "match" : "match active"}
+        className={!show ? 'match' : 'match active'}
       >
         <img
           src={`https://images.fotmob.com/image_resources/logo/teamlogo/${home.id}.png`}
@@ -133,14 +160,14 @@ export default function Match(props) {
           alt={`${away.name} Logo`}
         />
       </div>
-      <div className={!show ? "links" : "links active"}>
+      <div className={!show ? 'links' : 'links active'}>
         {!loadingLinks ? (
           <>
             <p onClick={loadLinks} className="link">
               Reload links
               <img src={reload} alt="Reload icon" />
             </p>
-            <Links links={links} loadLinks={loadLinks} />
+            <Links links={links} />
           </>
         ) : (
           <p>Loading links...</p>
@@ -148,4 +175,6 @@ export default function Match(props) {
       </div>
     </div>
   );
-}
+};
+
+export default Match;

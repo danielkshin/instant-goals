@@ -80,12 +80,6 @@
   transition-duration: 0.5s;
 }
 
-[theme="dark"] {
-  .link img {
-    filter: invert(1);
-  }
-}
-
 .link:hover,
 .match:hover {
   background-color: var(--hover);

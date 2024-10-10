@@ -1,6 +1,6 @@
-import logo from "./assets/logo.png";
+import logo from './assets/logo.png';
 
-export default function Header() {
+const Header = () => {
   return (
     <header>
       <img src={logo} alt="website logo" />
@@ -10,4 +10,6 @@ export default function Header() {
       </span>
     </header>
   );
-}
+};
+
+export default Header;
