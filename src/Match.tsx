@@ -54,8 +54,8 @@ const Match = (props: MatchProps) => {
         data.url.includes('goal')) &&
       // no crossposts
       !data.hasOwnProperty('crosspost_parent') &&
-      // posted on current date
-      new Date(data.created * 1000).toDateString() === new Date().toDateString()
+      // posted during or after the game
+      data.created * 1000 > Date.parse(match.status.utcTime)
     );
   };
 
