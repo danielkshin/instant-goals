@@ -79,12 +79,9 @@ const App = () => {
   return (
     <div className={`App${dark ? ' dark' : ''}`}>
       <Header />
-      <img
-        className="theme"
-        src={theme}
-        alt="Theme icon"
-        onClick={changeTheme}
-      />
+      <div className="theme">
+        <img src={theme} alt="Theme icon" onClick={changeTheme} />
+      </div>
       {leagues.map((league) => (
         <div className="leagueContainer" key={league.primaryId}>
           <div className="league">

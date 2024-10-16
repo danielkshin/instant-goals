@@ -24,6 +24,9 @@
 
   .theme {
     transform: rotate(-90deg);
+  }
+
+  .theme img {
     filter: invert(1);
   }
 
@@ -40,16 +43,22 @@
   position: fixed;
   top: 10px;
   right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: var(--match);
+  transition-duration: 0.5s;
+}
+
+.theme img {
   width: 30px;
   height: 30px;
   padding: 5px;
-  border-radius: 5px;
-  background-color: #ececec;
   transition-duration: 0.5s;
 }
 
 .theme:hover {
-  background-color: #d7d7d7;
+  background-color: var(--hover);
   cursor: pointer;
 }
 
