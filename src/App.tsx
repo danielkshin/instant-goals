@@ -32,6 +32,7 @@ interface League {
 
 const App = () => {
   const [leagues, setLeagues] = useState<League[]>([]);
+  const [loadedLinks, setLoadedLinks] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [dark, setDark] = useState<boolean>(
     localStorage.getItem('dark') === 'true'
@@ -62,6 +63,7 @@ const App = () => {
             leagueIDs.includes(league.primaryId)
           )
         );
+        setLoadedLinks(true);
       } catch (e) {
         console.error(e);
         setError(true);
@@ -83,22 +85,28 @@ const App = () => {
       <div className="theme">
         <img src={theme} alt="Theme icon" onClick={changeTheme} />
       </div>
-      {leagues.map((league) => (
-        <div className="leagueContainer" key={league.primaryId}>
-          <div className="league">
-            <img
-              src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${
-                dark ? 'dark/' : ''
-              }${league.primaryId}.png`}
-              alt={`${league.name} Logo`}
-            />
-            <h2>{league.name}</h2>
+      {leagues.length > 0 ? (
+        leagues.map((league) => (
+          <div className="leagueContainer" key={league.primaryId}>
+            <div className="league">
+              <img
+                src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${
+                  dark ? 'dark/' : ''
+                }${league.primaryId}.png`}
+                alt={`${league.name} Logo`}
+              />
+              <h2>{league.name}</h2>
+            </div>
+            {league.matches.map((match) => (
+              <Match match={match} setError={setError} key={match.id} />
+            ))}
           </div>
-          {league.matches.map((match) => (
-            <Match match={match} setError={setError} key={match.id} />
-          ))}
-        </div>
-      ))}
+        ))
+      ) : !loadedLinks ? (
+        <p>Loading leagues and matches...</p>
+      ) : (
+        <p>No matches available</p>
+      )}
       <Footer />
     </div>
   );
