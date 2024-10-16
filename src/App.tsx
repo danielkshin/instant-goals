@@ -75,6 +75,10 @@ const App = () => {
 
   const changeTheme = () => {
     localStorage.setItem('dark', (!dark).toString());
+    document.documentElement.style.setProperty(
+      'color-scheme',
+      dark ? 'light' : 'dark'
+    );
     setDark(!dark);
   };
 

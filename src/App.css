@@ -1,3 +1,7 @@
+:root {
+  color-scheme: dark;
+}
+
 .App {
   --background: #f8f8f8;
   --hover: #dfdfdf;
@@ -122,22 +126,6 @@ footer a {
   text-decoration: none;
   font-weight: bold;
   color: inherit;
-}
-
-::-webkit-scrollbar {
-  width: 7px;
-}
-
-::-webkit-scrollbar-track {
-  background: #ececec;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbcbcb;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a9a9a9;
 }
 
 @media (max-width: 900px) {
