@@ -20,6 +20,7 @@ interface Match {
   status: {
     utcTime: string;
     started: boolean;
+    finished: boolean;
   };
 }
 

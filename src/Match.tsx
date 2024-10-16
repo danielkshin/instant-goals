@@ -14,6 +14,7 @@ interface MatchData {
   status: {
     utcTime: string;
     started: boolean;
+    finished: boolean;
   };
 }
 
@@ -66,10 +67,7 @@ const Match = (props: MatchProps) => {
     let newLinks: Link[] = [];
 
     // Search r/soccer by new (instant updates) during the game
-    if (
-      Date.now() > Date.parse(match.status.utcTime) &&
-      Date.now() < Date.parse(match.status.utcTime) + 5400000
-    ) {
+    if (match.status.started && !match.status.finished) {
       const teamNames = new Set([
         home.name,
         away.name,
@@ -96,7 +94,7 @@ const Match = (props: MatchProps) => {
     }
 
     // Search r/soccer by Reddit's search API (delayed updates) after the game
-    if (Date.now() > Date.parse(match.status.utcTime)) {
+    if (match.status.started || match.status.finished) {
       const searchQueries = [
         `"${home.name}"OR"${home.longName}"`,
         `"${away.name}"OR"${away.longName}"`,
