@@ -48,7 +48,7 @@ const Match = (props: MatchProps) => {
         data.title.includes('U21') ||
         data.title.includes(' W ')
       ) &&
-      // check link
+      // check for video links
       (data.url.includes('/v/') ||
         data.url.includes('/c/') ||
         data.url.includes('v.redd.it') ||
@@ -81,19 +81,21 @@ const Match = (props: MatchProps) => {
       const response = await fetch('https://old.reddit.com/r/soccer/new.json');
       const json = await response.json();
       for (const child of json.data.children) {
-        if (filterLinks(child.data)) {
-          if ([...teamNames].some((name) => child.data.title.includes(name))) {
-            newLinks.push({
-              title: child.data.title,
-              url: child.data.url,
-              created: child.data.created,
-            });
-          }
+        // If the link title contains any of the team names
+        if (
+          filterLinks(child.data) &&
+          [...teamNames].some((name) => child.data.title.includes(name))
+        ) {
+          newLinks.push({
+            title: child.data.title,
+            url: child.data.url,
+            created: child.data.created,
+          });
         }
       }
     }
 
-    // Search r/soccer by Reddit's search API (delayed updates) after the game
+    // Search r/soccer by Reddit's search API (delayed updates) during / after the game
     if (match.status.started || match.status.finished) {
       const searchQueries = [
         `"${home.name}"OR"${home.longName}"`,
@@ -106,22 +108,26 @@ const Match = (props: MatchProps) => {
         const json = await response.json();
 
         for (const child of json.data.children) {
-          if (filterLinks(child.data)) {
-            if (!newLinks.some((link) => link.url === child.data.url)) {
-              newLinks.push({
-                title: child.data.title,
-                url: child.data.url,
-                created: child.data.created,
-              });
-            }
+          // If the link is not already in the list (from searching by new)
+          if (
+            filterLinks(child.data) &&
+            !newLinks.some((link) => link.url === child.data.url)
+          ) {
+            newLinks.push({
+              title: child.data.title,
+              url: child.data.url,
+              created: child.data.created,
+            });
           }
         }
       }
     }
 
+    // Sort links by created time (oldest first)
     newLinks.sort((a, b) => {
       return a.created - b.created;
     });
+
     setLinks(newLinks);
     setLoadingLinks(false);
   };
