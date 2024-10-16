@@ -142,6 +142,11 @@ footer a {
 
 @media (max-width: 900px) {
   .theme {
+    width: 35px;
+    height: 35px;
+  }
+
+  .theme img {
     width: 25px;
     height: 25px;
   }
