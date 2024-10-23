@@ -46,6 +46,11 @@ const App = () => {
   };
 
   useEffect(() => {
+    document.documentElement.style.setProperty(
+      'color-scheme',
+      dark ? 'dark' : 'light'
+    );
+
     const leagueIDs = [
       42, 44, 47, 50, 53, 54, 55, 73, 74, 77, 87, 132, 133, 134, 138, 139, 141,
       207, 209, 222, 247, 289, 290, 8924, 9806, 9807, 9808, 9809, 10197, 10199,
