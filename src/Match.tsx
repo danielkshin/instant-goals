@@ -73,10 +73,6 @@ const Match = (props: MatchProps) => {
         away.name,
         home.longName,
         away.longName,
-        ...home.name.split(' '),
-        ...away.name.split(' '),
-        ...home.longName.split(' '),
-        ...away.longName.split(' '),
       ]);
       const response = await fetch('https://old.reddit.com/r/soccer/new.json');
       const json = await response.json();
