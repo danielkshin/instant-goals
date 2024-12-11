@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Links from './Links';
 import './Match.css';
-import reload from './assets/reload.png';
+import reload from '../assets/reload.png';
 
 interface MatchProps {
   match: MatchData;

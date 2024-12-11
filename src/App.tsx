@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import Header from './Header';
-import Match from './Match';
-import Error from './Error';
-import Footer from './Footer';
+import Header from './components/Header';
+import Match from './components/Match';
+import Error from './components/Error';
+import Footer from './components/Footer';
 import theme from './assets/theme.png';
 
 interface Team {
