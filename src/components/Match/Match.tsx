@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Links from './Links';
+import { Links } from 'components';
 import './Match.css';
-import reload from './assets/reload.png';
+import reload from 'assets/reload.png';
 
 interface MatchProps {
   match: MatchData;
@@ -33,8 +33,8 @@ interface Link {
 
 const Match = (props: MatchProps) => {
   const [links, setLinks] = useState<Link[]>([]);
-  const [show, setShow] = useState<boolean>(false);
-  const [loadingLinks, setLoadingLinks] = useState<boolean>(false);
+  const [show, setShow] = useState(false);
+  const [loadingLinks, setLoadingLinks] = useState(false);
 
   const match = props.match;
   const home = match.home;

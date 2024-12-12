@@ -1,0 +1,10 @@
+footer {
+  line-height: 25px;
+  margin-top: auto;
+}
+
+footer a {
+  text-decoration: none;
+  font-weight: bold;
+  color: inherit;
+}
