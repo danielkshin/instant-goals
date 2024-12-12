@@ -105,3 +105,9 @@
     font-size: 13px;
   }
 }
+
+[data-theme='dark'] {
+  .link img {
+    filter: invert(1);
+  }
+}

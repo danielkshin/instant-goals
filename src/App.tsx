@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import useLocalStorage from 'use-local-storage';
 import './App.css';
 import ThemeButton from './components/ThemeButton';
