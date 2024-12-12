@@ -7,12 +7,11 @@ const App = () => {
   const [error, setError] = useState(false);
   const [dark, setDark] = useLocalStorage('dark', false);
 
-  if (error) return <Error />;
   return (
     <div className="App" data-theme={dark ? 'dark' : 'light'}>
       <Header />
       <ThemeButton dark={dark} setDark={setDark} />
-      <Matches dark={dark} setError={setError} />
+      {error ? <Error /> : <Matches dark={dark} setError={setError} />}
       <Footer />
     </div>
   );
