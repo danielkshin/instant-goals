@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import themeIcon from '../assets/themeIcon.png';
+import themeIcon from 'assets/themeIcon.png';
 import './ThemeButton.css';
 
 interface ThemeButtonProps {

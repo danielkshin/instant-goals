@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Match from './Match';
+import { Match } from 'components';
 import './Matches.css';
 
 interface MatchesProps {
@@ -46,7 +46,7 @@ const date = formatDate(new Date());
 
 const Matches = ({ dark, setError }: MatchesProps) => {
   const [leagues, setLeagues] = useState<League[]>([]);
-  const [loadedLinks, setLoadedLinks] = useState<boolean>(false);
+  const [loadedLinks, setLoadedLinks] = useState(false);
 
   useEffect(() => {
     const fetchLeagues = async () => {
