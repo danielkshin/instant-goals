@@ -3,15 +3,8 @@ import { connectLambda, getStore } from '@netlify/blobs';
 exports.handler = async function (event) {
   connectLambda(event);
 
-  const date = event.queryStringParameters.date;
-  const response = await fetch(
-    `https://www.fotmob.com/api/matches?date=${date}`
-  );
-
-  const json = await response.json();
-
   const matchesBlob = getStore('matches');
-  await matchesBlob.setJSON('matches', json);
+  const json = await matchesBlob.get('matches', { type: 'json' });
 
   return {
     statusCode: 200,

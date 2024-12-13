@@ -49,25 +49,34 @@ const Matches = ({ dark, setError }: MatchesProps) => {
   const [loadedLinks, setLoadedLinks] = useState(false);
 
   useEffect(() => {
-    const fetchLeagues = async () => {
-      try {
-        const response = await fetch(
-          `/.netlify/functions/matches?date=${date}`
-        );
-        const json = await response.json();
-        setLeagues(
-          json.leagues.filter((league: League) =>
-            leagueIDs.includes(league.primaryId)
-          )
-        );
-        setLoadedLinks(true);
-      } catch (e) {
-        console.error(e);
-        setError(true);
-      }
+    const fetchMatches = async (link: string) => {
+      const response = await fetch(link);
+      const json = await response.json();
+      setLeagues(
+        json.leagues.filter((league: League) =>
+          leagueIDs.includes(league.primaryId)
+        )
+      );
+      setLoadedLinks(true);
     };
 
-    fetchLeagues();
+    (async () => {
+      try {
+        await fetchMatches(`/.netlify/functions/matches?date=${date}`);
+      } catch (e) {
+        console.error(e);
+        console.error(
+          'Error fetching matches, falling back to most recent matches data.'
+        );
+        try {
+          await fetchMatches('/.netlify/functions/matchesFallback');
+        } catch (e) {
+          console.error(e);
+          console.error('Error fetching fallback matches data.');
+          setError(true);
+        }
+      }
+    })();
   }, []);
 
   return (
