@@ -4,7 +4,7 @@ import './Matches.css';
 
 interface MatchesProps {
   dark: boolean;
-  setError: (error: boolean) => void;
+  displayError: () => void;
 }
 
 interface Team {
@@ -44,7 +44,7 @@ const leagueIDs = [
 ];
 const date = formatDate(new Date());
 
-const Matches = ({ dark, setError }: MatchesProps) => {
+const Matches = ({ dark, displayError }: MatchesProps) => {
   const [leagues, setLeagues] = useState<League[]>([]);
   const [loadedLinks, setLoadedLinks] = useState(false);
 
@@ -73,7 +73,7 @@ const Matches = ({ dark, setError }: MatchesProps) => {
         } catch (e) {
           console.error(e);
           console.error('Error fetching fallback matches data.');
-          setError(true);
+          displayError();
         }
       }
     })();
@@ -94,7 +94,7 @@ const Matches = ({ dark, setError }: MatchesProps) => {
               <h2>{league.name}</h2>
             </div>
             {league.matches.map((match) => (
-              <Match match={match} setError={setError} key={match.id} />
+              <Match match={match} displayError={displayError} key={match.id} />
             ))}
           </div>
         ))

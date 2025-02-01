@@ -4,10 +4,10 @@ import './ThemeButton.css';
 
 interface ThemeButtonProps {
   dark: boolean;
-  setDark: (error: boolean) => void;
+  changeTheme: () => void;
 }
 
-const ThemeButton = ({ dark, setDark }: ThemeButtonProps) => {
+const ThemeButton = ({ dark, changeTheme }: ThemeButtonProps) => {
   useEffect(() => {
     document.documentElement.style.setProperty(
       'color-scheme',
@@ -17,7 +17,7 @@ const ThemeButton = ({ dark, setDark }: ThemeButtonProps) => {
 
   return (
     <div className="theme">
-      <img src={themeIcon} alt="Theme icon" onClick={() => setDark(!dark)} />
+      <img src={themeIcon} alt="Theme icon" onClick={changeTheme} />
     </div>
   );
 };

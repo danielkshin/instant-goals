@@ -5,7 +5,7 @@ import reload from 'assets/reload.png';
 
 interface MatchProps {
   match: MatchData;
-  setError: (error: boolean) => void;
+  displayError: () => void;
 }
 
 interface MatchData {
@@ -132,7 +132,7 @@ const Match = (props: MatchProps) => {
     if (!show) {
       loadLinks().catch((e) => {
         console.error(e);
-        props.setError(true);
+        props.displayError();
       });
     }
     setShow((show) => !show);
