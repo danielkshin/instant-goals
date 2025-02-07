@@ -34,3 +34,23 @@
   background-color: var(--hover);
   cursor: pointer;
 }
+
+@media (max-width: 450px) {
+  .linkRow {
+    gap: 0;
+  }
+
+  .comments {
+    padding: 10px;
+  }
+
+  .link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .comments svg {
+    width: 12px;
+    height: 12px;
+  }
+}
