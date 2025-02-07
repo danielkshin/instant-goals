@@ -59,28 +59,6 @@
   }
 }
 
-.link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  text-decoration: none;
-  padding: 20px;
-  margin: 0px;
-  border-radius: 10px;
-  color: var(--text);
-  transition-duration: 0.5s;
-}
-
-.link img {
-  width: 25px;
-  height: 25px;
-  transition-duration: 0.5s;
-}
-
-.link:hover,
 .match:hover {
   background-color: var(--hover);
   cursor: pointer;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Links } from 'components';
+import { TbReload } from 'react-icons/tb';
 import './Match.css';
-import reload from 'assets/reload.png';
 
 interface MatchProps {
   match: MatchData;
@@ -28,6 +28,7 @@ interface Team {
 interface Link {
   title: string;
   url: string;
+  permalink: string;
   created: number;
 }
 
@@ -85,6 +86,7 @@ const Match = (props: MatchProps) => {
           newLinks.push({
             title: child.data.title,
             url: child.data.url,
+            permalink: child.data.permalink,
             created: child.data.created,
           });
         }
@@ -112,6 +114,7 @@ const Match = (props: MatchProps) => {
             newLinks.push({
               title: child.data.title,
               url: child.data.url,
+              permalink: child.data.permalink,
               created: child.data.created,
             });
           }
@@ -168,8 +171,8 @@ const Match = (props: MatchProps) => {
         {!loadingLinks ? (
           <>
             <p onClick={loadLinks} className="link">
-              Reload links
-              <img src={reload} alt="Reload icon" />
+              Reload Links
+              <TbReload size={20} />
             </p>
             <Links links={links} />
           </>
