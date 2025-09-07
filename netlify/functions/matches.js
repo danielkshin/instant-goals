@@ -1,5 +1,4 @@
 import { connectLambda, getStore } from '@netlify/blobs';
-require('dotenv').config();
 
 exports.handler = async function (event) {
   connectLambda(event);
