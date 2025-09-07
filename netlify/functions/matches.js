@@ -1,11 +1,17 @@
 import { connectLambda, getStore } from '@netlify/blobs';
+require('dotenv').config();
 
 exports.handler = async function (event) {
   connectLambda(event);
 
   const date = event.queryStringParameters.date;
   const response = await fetch(
-    `https://www.fotmob.com/api/matches?date=${date}`
+    `https://www.fotmob.com/api/matches?date=${date}`,
+    {
+      headers: {
+        'X-Mas': process.env.XMAS,
+      },
+    }
   );
 
   const json = await response.json();
