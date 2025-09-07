@@ -75,7 +75,7 @@ const Match = (props: MatchProps) => {
         home.longName,
         away.longName,
       ]);
-      const response = await fetch('https://old.reddit.com/r/soccer/new.json');
+      const response = await fetch('/.netlify/functions/redditNew');
       const json = await response.json();
       for (const child of json.data.children) {
         // If the link title contains any of the team names
@@ -101,7 +101,7 @@ const Match = (props: MatchProps) => {
       ];
       for (const query of searchQueries) {
         const response = await fetch(
-          `https://old.reddit.com/r/soccer/search.json?q=${query}&type=link&sort=new&t=day&restrict_sr=on`
+          `/.netlify/functions/reddit?query=${query}`
         );
         const json = await response.json();
 
