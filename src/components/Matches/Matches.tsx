@@ -40,7 +40,8 @@ const formatDate = (date: Date): String => {
 
 const leagueIDs = [
   42, 44, 47, 50, 53, 54, 55, 73, 74, 77, 87, 132, 133, 134, 138, 139, 141, 207,
-  209, 222, 247, 289, 290, 8924, 9806, 9807, 9808, 9809, 10197, 10199, 10216,
+  209, 222, 247, 289, 290, 8924, 9806, 9807, 9808, 9809, 10200, 10216, 10195,
+  10196, 10197, 10198, 10199,
 ];
 const date = formatDate(new Date());
 
@@ -83,7 +84,7 @@ const Matches = ({ dark, displayError }: MatchesProps) => {
     <div>
       {leagues.length > 0 ? (
         leagues.map((league) => (
-          <div className="leagueContainer" key={league.primaryId}>
+          <div className="leagueContainer" key={league.primaryId + league.name}>
             <div className="league">
               <img
                 src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${
