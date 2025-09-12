@@ -44,6 +44,7 @@ const leagueIDs = [
   10196, 10197, 10198, 10199,
 ];
 const date = formatDate(new Date());
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const Matches = ({ dark, displayError }: MatchesProps) => {
   const [leagues, setLeagues] = useState<League[]>([]);
@@ -63,7 +64,9 @@ const Matches = ({ dark, displayError }: MatchesProps) => {
 
     (async () => {
       try {
-        await fetchMatches(`/.netlify/functions/matches?date=${date}`);
+        await fetchMatches(
+          `/.netlify/functions/matches?date=${date}&timezone=${timezone}`
+        );
       } catch (e) {
         console.error(e);
         console.error(

@@ -105,8 +105,9 @@ exports.handler = async function (event) {
   connectLambda(event);
 
   const date = event.queryStringParameters.date;
+  const timezone = event.queryStringParameters.timezone;
   const response = await fetch(
-    `https://www.fotmob.com/api/matches?date=${date}`,
+    `https://www.fotmob.com/api/matches?date=${date}&timezone=${timezone}`,
     {
       headers: {
         'X-Mas': generateXmasHeader('https://www.fotmob.com/api/matches'),
