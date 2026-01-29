@@ -61,6 +61,20 @@ const Match = (props: MatchProps) => {
     );
   };
 
+  const trimTeamName = (name: string): string => {
+    return name
+      .toLowerCase()
+      .split(" ")
+      .filter(word => word !== "fc" && word !== "cf")
+      .join(" ");
+  };
+
+  const removeAccents = (str: string): string => {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  };
+
   const loadLinks = async (): Promise<void> => {
     setLoadingLinks(true);
     setLinks([]);
@@ -70,18 +84,10 @@ const Match = (props: MatchProps) => {
     // Search r/soccer by new (instant updates) during the game
     if (match.status.started && !match.status.finished) {
       const teamNames = new Set([
-        home.name,
-        away.name,
-        home.name.replace("FC", "").trim(),
-        away.name.replace("FC", "").trim(),
-        home.name.replace("CF", "").trim(),
-        away.name.replace("CF", "").trim(),
-        home.longName,
-        away.longName,
-        home.longName.replace("FC", "").trim(),
-        away.longName.replace("FC", "").trim(),
-        home.longName.replace("CF", "").trim(),
-        away.longName.replace("CF", "").trim(),
+        removeAccents(trimTeamName(home.name)),
+        removeAccents(trimTeamName(away.name)),
+        removeAccents(trimTeamName(home.longName)),
+        removeAccents(trimTeamName(away.longName)),
       ]);
       const response = await fetch('/.netlify/functions/redditNew');
       const json = await response.json();
@@ -89,7 +95,7 @@ const Match = (props: MatchProps) => {
         // If the link title contains any of the team names
         if (
           filterLinks(child.data) &&
-          [...teamNames].some((name) => child.data.title.includes(name))
+          [...teamNames].some((name) => removeAccents(child.data.title.toLowerCase()).includes(name))
         ) {
           newLinks.push({
             title: child.data.title,
