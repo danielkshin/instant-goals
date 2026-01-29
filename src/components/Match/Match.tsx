@@ -53,6 +53,7 @@ const Match = (props: MatchProps) => {
       (data.url.includes('/v/') ||
         data.url.includes('/c/') ||
         data.url.includes('v.redd.it') ||
+        data.url.includes('stream') ||
         data.url.includes('goal')) &&
       // no crossposts
       !data.hasOwnProperty('crosspost_parent') &&
