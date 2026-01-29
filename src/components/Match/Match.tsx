@@ -72,8 +72,16 @@ const Match = (props: MatchProps) => {
       const teamNames = new Set([
         home.name,
         away.name,
+        home.name.replace("FC", "").trim(),
+        away.name.replace("FC", "").trim(),
+        home.name.replace("CF", "").trim(),
+        away.name.replace("CF", "").trim(),
         home.longName,
         away.longName,
+        home.longName.replace("FC", "").trim(),
+        away.longName.replace("FC", "").trim(),
+        home.longName.replace("CF", "").trim(),
+        away.longName.replace("CF", "").trim(),
       ]);
       const response = await fetch('/.netlify/functions/redditNew');
       const json = await response.json();
