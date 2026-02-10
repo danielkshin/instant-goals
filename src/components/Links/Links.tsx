@@ -1,27 +1,21 @@
+import { LinkData } from 'types';
 import { FaComment } from 'react-icons/fa';
 import './Links.css';
 
-interface Link {
-  title: string;
-  url: string;
-  permalink: string;
-}
-
 interface LinksProps {
-  links: Link[];
+  links: LinkData[];
 }
 
 const Links = (props: LinksProps) => {
   const links = props.links;
   if (links.length > 0) {
     return links.map((link) => (
-      <div className="linkRow">
+      <div className="linkRow" key={link.url}>
         <a
           href={link.url}
           target="_blank"
           rel="noreferrer"
           className="link"
-          key={link.url}
         >
           {link.title}
         </a>

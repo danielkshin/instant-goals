@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Links } from 'components';
 import { TbReload } from 'react-icons/tb';
+import { useLinks } from 'hooks/useLinks';
+import { MatchData } from 'types';
 import './Match.css';
 
 interface MatchProps {
@@ -8,150 +10,15 @@ interface MatchProps {
   displayError: () => void;
 }
 
-interface MatchData {
-  home: Team;
-  away: Team;
-  status: {
-    utcTime: string;
-    started: boolean;
-    finished: boolean;
-  };
-}
-
-interface Team {
-  id: number;
-  name: string;
-  longName: string;
-  score?: number;
-}
-
-interface Link {
-  title: string;
-  url: string;
-  permalink: string;
-  created: number;
-}
-
-const Match = (props: MatchProps) => {
-  const [links, setLinks] = useState<Link[]>([]);
+const Match = ({ match, displayError }: MatchProps) => {
   const [show, setShow] = useState(false);
-  const [loadingLinks, setLoadingLinks] = useState(false);
+  const { links, loadingLinks, loadLinks } = useLinks(match, displayError);
 
-  const match = props.match;
-  const home = match.home;
-  const away = match.away;
-
-  const filterLinks = (data: any): boolean => {
-    return (
-      // exclude U19, U21, and women's teams
-      !(
-        data.title.includes('U19') ||
-        data.title.includes('U21') ||
-        data.title.includes(' W ')
-      ) &&
-      // check for video links
-      (data.url.includes('/v/') ||
-        data.url.includes('/c/') ||
-        data.url.includes('v.redd.it') ||
-        data.url.includes('stream') ||
-        data.url.includes('goal')) &&
-      // no crossposts
-      !data.hasOwnProperty('crosspost_parent') &&
-      // posted during or after the game
-      data.created * 1000 > Date.parse(match.status.utcTime)
-    );
-  };
-
-  const trimTeamName = (name: string): string => {
-    return name
-      .toLowerCase()
-      .split(" ")
-      .filter(word => word !== "fc" && word !== "cf")
-      .join(" ");
-  };
-
-  const removeAccents = (str: string): string => {
-    return str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-  };
-
-  const loadLinks = async (): Promise<void> => {
-    setLoadingLinks(true);
-    setLinks([]);
-
-    let newLinks: Link[] = [];
-
-    // Search r/soccer by new (instant updates) during the game
-    if (match.status.started && !match.status.finished) {
-      const teamNames = new Set([
-        removeAccents(trimTeamName(home.name)),
-        removeAccents(trimTeamName(away.name)),
-        removeAccents(trimTeamName(home.longName)),
-        removeAccents(trimTeamName(away.longName)),
-      ]);
-      const response = await fetch('/.netlify/functions/redditNew');
-      const json = await response.json();
-      for (const child of json.data.children) {
-        // If the link title contains any of the team names
-        if (
-          filterLinks(child.data) &&
-          [...teamNames].some((name) => removeAccents(child.data.title.toLowerCase()).includes(name))
-        ) {
-          newLinks.push({
-            title: child.data.title,
-            url: child.data.url,
-            permalink: child.data.permalink,
-            created: child.data.created,
-          });
-        }
-      }
-    }
-
-    // Search r/soccer by Reddit's search API (delayed updates) during / after the game
-    if (match.status.started || match.status.finished) {
-      const searchQueries = [
-        `"${home.name}"OR"${home.longName}"`,
-        `"${away.name}"OR"${away.longName}"`,
-      ];
-      for (const query of searchQueries) {
-        const response = await fetch(
-          `/.netlify/functions/reddit?query=${query}`
-        );
-        const json = await response.json();
-
-        for (const child of json.data.children) {
-          // If the link is not already in the list (from searching by new)
-          if (
-            filterLinks(child.data) &&
-            !newLinks.some((link) => link.url === child.data.url)
-          ) {
-            newLinks.push({
-              title: child.data.title,
-              url: child.data.url,
-              permalink: child.data.permalink,
-              created: child.data.created,
-            });
-          }
-        }
-      }
-    }
-
-    // Sort links by created time (oldest first)
-    newLinks.sort((a, b) => {
-      return a.created - b.created;
-    });
-
-    setLinks(newLinks);
-    setLoadingLinks(false);
-  };
+  const { home, away } = match;
 
   const showLinks = (): void => {
     if (!show) {
-      loadLinks().catch((e) => {
-        console.error(e);
-        props.displayError();
-      });
+      loadLinks();
     }
     setShow((show) => !show);
   };
