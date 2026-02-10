@@ -64,6 +64,24 @@
   cursor: pointer;
 }
 
+.reload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  gap: 10px;
+  flex-grow: 1;
+  padding: 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition-duration: 0.5s;
+}
+
+.reload:hover {
+  background-color: var(--hover);
+  cursor: pointer;
+}
+
 @media (max-width: 450px) {
   .match {
     padding: 15px;

@@ -52,7 +52,7 @@ const Match = ({ match, displayError }: MatchProps) => {
       <div className={!show ? 'links' : 'links active'}>
         {!loadingLinks ? (
           <>
-            <p onClick={loadLinks} className="link">
+            <p onClick={loadLinks} className="reload">
               Reload Links
               <TbReload size={20} />
             </p>
