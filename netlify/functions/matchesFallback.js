@@ -1,6 +1,6 @@
 import { connectLambda, getStore } from '@netlify/blobs';
 
-exports.handler = async function (event) {
+export const handler = async function (event) {
   connectLambda(event);
 
   const matchesBlob = getStore('matches');

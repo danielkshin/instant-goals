@@ -1,4 +1,4 @@
-exports.handler = async function (event) {
+export const handler = async function (event) {
   const query = event.queryStringParameters.query;
 
   const auth = Buffer.from(

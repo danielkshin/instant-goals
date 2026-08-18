@@ -1,6 +1,5 @@
 import { connectLambda, getStore } from '@netlify/blobs';
-
-const crypto = require('crypto');
+import crypto from 'node:crypto';
 
 // https://github.com/MieszkoPugowski/FMScraper/blob/main/fmscraper/xmas_generator.py
 function generateXmasHeader(url) {
@@ -101,7 +100,7 @@ It's coming home) Thirty years of hurt
   return xmas;
 }
 
-exports.handler = async function (event) {
+export const handler = async function (event) {
   connectLambda(event);
 
   const date = event.queryStringParameters.date;
