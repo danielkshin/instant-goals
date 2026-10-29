@@ -1,6 +1,4 @@
-export const handler = async function (event) {
-  const query = event.queryStringParameters.query;
-
+export const handler = async function () {
   const auth = Buffer.from(
     `${process.env.REDDIT_CLIENT_ID}:${process.env.REDDIT_CLIENT_SECRET}`
   ).toString('base64');

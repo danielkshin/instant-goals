@@ -6,17 +6,20 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  { ignores: ["dist", ".netlify"] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked],
+    ...js.configs.recommended,
+    files: ["**/*.js"],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
     },
     settings: { react: { version: "18.3" } },
     plugins: {
@@ -25,13 +28,21 @@ export default tseslint.config(
       react,
     },
     rules: {
+      "@typescript-eslint/no-unused-expressions": [
+        "error",
+        {
+          allowShortCircuit: false,
+          allowTernary: false,
+          allowTaggedTemplates: false,
+        },
+      ],
+      ...react.configs.recommended.rules,
+      ...react.configs["jsx-runtime"].rules,
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",
         { allowConstantExport: true },
       ],
     },
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
   }
 );
