@@ -12,7 +12,7 @@ export const useLinks = (match: MatchData, displayError: () => void) => {
         setLinks([]);
 
         try {
-            let newLinks: LinkData[] = [];
+            const newLinks: LinkData[] = [];
             const { home, away, status } = match;
 
             // Search r/soccer by new (instant updates) during the game

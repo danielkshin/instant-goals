@@ -1,6 +1,6 @@
 import { LinkData, MatchData } from "types";
 
-export const filterLinks = (data: any, match: MatchData): boolean => {
+export const filterLinks = (data: LinkData, match: MatchData): boolean => {
     return (
         // exclude U19, U21, and women's teams
         !(
@@ -15,7 +15,7 @@ export const filterLinks = (data: any, match: MatchData): boolean => {
             data.url.includes('stream') ||
             data.url.includes('goal')) &&
         // no crossposts
-        !data.hasOwnProperty('crosspost_parent') &&
+        !Object.prototype.hasOwnProperty.call(data, 'crosspost_parent') &&
         // posted during or after the game
         data.created * 1000 > Date.parse(match.status.utcTime)
     );
