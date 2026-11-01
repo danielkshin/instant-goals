@@ -65,6 +65,10 @@
 }
 
 .reload {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,7 +81,7 @@
   transition-duration: 0.5s;
 }
 
-.reload:hover {
+.reload:hover:not(:disabled) {
   background-color: var(--hover);
   cursor: pointer;
 }
@@ -97,6 +101,7 @@
   }
 
   .links a,
+  .reload,
   .links p {
     font-size: 13px;
   }
