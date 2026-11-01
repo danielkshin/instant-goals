@@ -1,6 +1,6 @@
 import type { LinkData, MatchData } from '../types/index.ts';
 import { filterLinks, sortLinks } from '../utils/links.ts';
-import { removeAccents, trimTeamName } from '../utils/string.ts';
+import { removeAccents, teamSearchQuery } from '../utils/string.ts';
 
 export const mergeLinks = (previous: LinkData[], incoming: LinkData[]) =>
     sortLinks([...new Map([...previous, ...incoming].map(link => [link.url, link])).values()]);
@@ -8,16 +8,17 @@ export const mergeLinks = (previous: LinkData[], incoming: LinkData[]) =>
 export async function loadMatchLinks(match: MatchData, fetcher = fetch) {
     const { home, away, status } = match;
     const requests: { url: string; filterTeam: boolean }[] = [];
-    const teamNames = [home.name, away.name, home.longName, away.longName]
-        .map(name => removeAccents(trimTeamName(name)));
+    const teamNames = [home.name, home.shortName, home.longName, away.name, away.shortName, away.longName]
+        .map(name => removeAccents(name?.trim().toLowerCase() ?? '')).filter(Boolean);
 
     if (status.started && !status.finished) {
         requests.push({ url: '/.netlify/functions/redditNew', filterTeam: true });
     }
     if (status.started || status.finished) {
         for (const team of [home, away]) {
-            const query = `"${team.name}"OR"${team.longName}"`;
-            requests.push({ url: `/.netlify/functions/reddit?query=${query}`, filterTeam: false });
+            const query = teamSearchQuery(team.name, team.shortName, team.longName);
+            const params = new URLSearchParams({ query });
+            requests.push({ url: `/.netlify/functions/reddit?${params}`, filterTeam: false });
         }
     }
 
