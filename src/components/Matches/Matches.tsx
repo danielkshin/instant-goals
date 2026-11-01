@@ -1,5 +1,6 @@
 import { Match } from 'components';
 import { useMatches } from 'hooks/useMatches';
+import LastUpdated from './LastUpdated';
 import './Matches.css';
 
 interface MatchesProps {
@@ -8,7 +9,7 @@ interface MatchesProps {
 }
 
 const Matches = ({ dark, displayError }: MatchesProps) => {
-  const { leagues, loadedLinks } = useMatches(displayError);
+  const { leagues, loadedLinks, cachedAt } = useMatches(displayError);
 
   return (
     <div>
@@ -33,6 +34,7 @@ const Matches = ({ dark, displayError }: MatchesProps) => {
       ) : (
         <p>No matches available</p>
       )}
+      {cachedAt && <LastUpdated timestamp={cachedAt} />}
     </div>
   );
 };

@@ -1,13 +1,9 @@
 import { connectLambda, getStore } from '@netlify/blobs';
+import { createFallbackHandler } from '../lib/matches.js';
 
-export const handler = async function (event) {
-  connectLambda(event);
-
-  const matchesBlob = getStore('matches');
-  const json = await matchesBlob.get('matches', { type: 'json' });
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(json),
-  };
-};
+export const handler = createFallbackHandler({
+  openStore: (event) => {
+    connectLambda(event);
+    return getStore('matches');
+  },
+});

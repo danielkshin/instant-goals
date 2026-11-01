@@ -7,6 +7,7 @@ import { fetchMatches, fetchMatchesFallback } from "services/fotmobService";
 export const useMatches = (displayError: () => void) => {
     const [leagues, setLeagues] = useState<LeagueData[]>([]);
     const [loadedLinks, setLoadedLinks] = useState(false);
+    const [cachedAt, setCachedAt] = useState<string | null>(null);
 
     useEffect(() => {
         const date = formatDate(new Date());
@@ -15,6 +16,7 @@ export const useMatches = (displayError: () => void) => {
         (async () => {
             try {
                 const json = await fetchMatches(date, timezone);
+                setCachedAt(json.cache.cachedAt);
                 setLeagues(
                     json.leagues.filter((league: LeagueData) =>
                         LEAGUE_IDS.includes(league.primaryId)
@@ -27,7 +29,8 @@ export const useMatches = (displayError: () => void) => {
                     'Error fetching matches, falling back to most recent matches data.'
                 );
                 try {
-                    const fallbackJson = await fetchMatchesFallback();
+                    const fallbackJson = await fetchMatchesFallback(date, timezone);
+                    setCachedAt(fallbackJson.cache.cachedAt);
                     setLeagues(
                         fallbackJson.leagues.filter((league: LeagueData) =>
                             LEAGUE_IDS.includes(league.primaryId)
@@ -43,5 +46,5 @@ export const useMatches = (displayError: () => void) => {
         })();
     }, [displayError]);
 
-    return { leagues, loadedLinks };
+    return { leagues, loadedLinks, cachedAt };
 };

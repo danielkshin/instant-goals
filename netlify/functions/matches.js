@@ -1,5 +1,6 @@
 import { connectLambda, getStore } from '@netlify/blobs';
 import crypto from 'node:crypto';
+import { createMatchesHandler } from '../lib/matches.js';
 
 // https://github.com/MieszkoPugowski/FMScraper/blob/main/fmscraper/xmas_generator.py
 function generateXmasHeader(url) {
@@ -100,27 +101,18 @@ It's coming home) Thirty years of hurt
   return xmas;
 }
 
-export const handler = async function (event) {
-  connectLambda(event);
-
-  const date = event.queryStringParameters.date;
-  const timezone = event.queryStringParameters.timezone;
-  const response = await fetch(
-    `https://www.fotmob.com/api/data/matches?date=${date}&timezone=${timezone}`,
+export const handler = createMatchesHandler({
+  fetchMatches: ({ date, timezone }) => fetch(
+    `https://www.fotmob.com/api/data/matches?${new URLSearchParams({ date, timezone })}`,
     {
       headers: {
         'X-Mas': generateXmasHeader('https://www.fotmob.com/api/data/matches'),
       },
+      signal: AbortSignal.timeout(8000),
     }
-  );
-
-  const json = await response.json();
-
-  const matchesBlob = getStore('matches');
-  await matchesBlob.setJSON('matches', json);
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(json),
-  };
-};
+  ),
+  openStore: (event) => {
+    connectLambda(event);
+    return getStore('matches');
+  },
+});
