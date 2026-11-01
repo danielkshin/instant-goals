@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react';
 import { Match } from 'components';
 import { useMatches } from 'hooks/useMatches';
 import LastUpdated from './LastUpdated';
@@ -10,6 +11,20 @@ interface MatchesProps {
 
 const Matches = ({ dark, displayError }: MatchesProps) => {
   const { leagues, loadedLinks, cachedAt } = useMatches(displayError);
+  const [toast, setToast] = useState<{ message: string } | null>(null);
+  const [toastVisible, setToastVisible] = useState(false);
+  const showLinksError = useCallback((message: string) => setToast({ message }), []);
+
+  useEffect(() => {
+    if (!toast) return;
+    setToastVisible(true);
+    const fadeTimeout = window.setTimeout(() => setToastVisible(false), 2500);
+    const clearTimeout = window.setTimeout(() => setToast(null), 2750);
+    return () => {
+      window.clearTimeout(fadeTimeout);
+      window.clearTimeout(clearTimeout);
+    };
+  }, [toast]);
 
   return (
     <div>
@@ -25,7 +40,7 @@ const Matches = ({ dark, displayError }: MatchesProps) => {
               <h2>{league.name}</h2>
             </div>
             {league.matches.map((match) => (
-              <Match match={match} displayError={displayError} key={match.id} />
+              <Match match={match} onLinksError={showLinksError} key={match.id} />
             ))}
           </div>
         ))
@@ -35,6 +50,9 @@ const Matches = ({ dark, displayError }: MatchesProps) => {
         <p>No matches available</p>
       )}
       {cachedAt && <LastUpdated timestamp={cachedAt} />}
+      <div className={`linksToast${toastVisible ? ' visible' : ''}`} role="status" aria-live="polite" aria-atomic="true">
+        {toast?.message}
+      </div>
     </div>
   );
 };

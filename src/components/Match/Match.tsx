@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Links } from 'components';
 import { TbReload } from 'react-icons/tb';
 import { useLinks } from 'hooks/useLinks';
@@ -7,12 +7,16 @@ import './Match.css';
 
 interface MatchProps {
   match: MatchData;
-  displayError: () => void;
+  onLinksError: (message: string) => void;
 }
 
-const Match = ({ match, displayError }: MatchProps) => {
+const Match = ({ match, onLinksError }: MatchProps) => {
   const [show, setShow] = useState(false);
-  const { links, loadingLinks, loadLinks } = useLinks(match, displayError);
+  const { links, loadingLinks, linksError, loadLinks } = useLinks(match);
+
+  useEffect(() => {
+    if (linksError) onLinksError(linksError);
+  }, [linksError, onLinksError]);
 
   const { home, away } = match;
 
@@ -50,16 +54,12 @@ const Match = ({ match, displayError }: MatchProps) => {
         />
       </div>
       <div className={!show ? 'links' : 'links active'}>
-        {!loadingLinks ? (
-          <>
-            <p onClick={loadLinks} className="reload">
-              Reload Links
-              <TbReload size={20} />
-            </p>
-            <Links links={links} />
-          </>
-        ) : (
-          <p>Loading links...</p>
+        <button type="button" onClick={loadLinks} className="reload" disabled={loadingLinks}>
+          {loadingLinks ? 'Loading links...' : 'Reload Links'}
+          {!loadingLinks && <TbReload size={20} />}
+        </button>
+        {(links.length > 0 || !loadingLinks) && (
+          <Links links={links} />
         )}
       </div>
     </div>

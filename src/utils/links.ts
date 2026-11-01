@@ -1,4 +1,4 @@
-import { LinkData, MatchData } from "types";
+import type { LinkData, MatchData } from "types";
 
 export const filterLinks = (data: LinkData, match: MatchData): boolean => {
     return (

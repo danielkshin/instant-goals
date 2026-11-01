@@ -1,3 +1,38 @@
+.linksToast {
+  position: fixed;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--background);
+  font-size: 0.8rem;
+  box-shadow: 0 2px 12px #0003;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.linksToast.visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .linksToast {
+    transition: none;
+  }
+}
+
+.linksToast:empty {
+  padding: 0;
+  box-shadow: none;
+}
+
 .lastUpdated {
   margin: 10px;
   font-size: 0.8rem;
