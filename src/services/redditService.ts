@@ -4,8 +4,9 @@ export const fetchRedditNew = async () => {
 };
 
 export const searchReddit = async (query: string) => {
+    const params = new URLSearchParams({ query });
     const response = await fetch(
-        `/.netlify/functions/reddit?query=${query}`
+        `/.netlify/functions/reddit?${params}`
     );
     return response.json();
 };

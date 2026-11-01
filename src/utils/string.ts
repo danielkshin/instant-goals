@@ -1,10 +1,13 @@
 
-export const trimTeamName = (name: string): string => {
-    return name
-        .toLowerCase()
-        .split(" ")
-        .filter(word => word !== "fc" && word !== "cf")
-        .join(" ");
+export const teamSearchQuery = (...names: (string | undefined)[]): string => {
+    const uniqueNames = new Map<string, string>();
+    for (const name of names) {
+        const value = name?.trim();
+        if (value && !uniqueNames.has(value.toLowerCase())) {
+            uniqueNames.set(value.toLowerCase(), value);
+        }
+    }
+    return [...uniqueNames.values()].map(value => `"${value}"`).join(' OR ');
 };
 
 export const removeAccents = (str: string): string => {

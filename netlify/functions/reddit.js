@@ -21,8 +21,9 @@ export const handler = async function (event) {
   const tokenData = await tokenResponse.json();
   const token = tokenData.access_token;
 
+  const params = new URLSearchParams({ q: query, sort: 'new', t: 'day', restrict_sr: 'on' });
   const redditResponse = await fetch(
-    `https://oauth.reddit.com/r/soccer/search?q=${query}&sort=new&t=day&restrict_sr=on`,
+    `https://oauth.reddit.com/r/soccer/search?${params}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
