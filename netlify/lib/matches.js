@@ -2,7 +2,8 @@ export const MAX_CACHE_AGE_MS = 24 * 60 * 60 * 1000;
 
 const isObject = (value) => value !== null && typeof value === 'object';
 const isTeam = (team) => isObject(team) && Number.isFinite(team.id)
-  && typeof team.name === 'string' && typeof team.longName === 'string'
+  && typeof team.name === 'string'
+  && (team.longName === undefined || typeof team.longName === 'string')
   && (team.score == null || Number.isFinite(team.score));
 
 export function isMatchesResponse(data) {

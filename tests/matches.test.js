@@ -55,6 +55,28 @@ test('fresh results are cached and returned with a timestamp; fallback is labele
   assert.deepEqual(fallback.cache, { cachedAt: new Date(time).toISOString(), isFallback: true });
 });
 
+test('teams without long names are returned fresh and from the cache', async () => {
+  const { deps } = fixture();
+  const payload = structuredClone(data);
+  delete payload.leagues[0].matches[0].home.longName;
+  delete payload.leagues[0].matches[0].away.longName;
+  deps.fetchMatches = async () => ({ ok: true, json: async () => payload });
+
+  for (const factory of [createMatchesHandler, createFallbackHandler]) {
+    const response = await factory(deps)(event);
+    assert.equal(response.statusCode, 200);
+    assert.deepEqual(JSON.parse(response.body).leagues, payload.leagues);
+  }
+});
+
+test('non-string long names are still rejected', async () => {
+  const { deps } = fixture();
+  const payload = structuredClone(data);
+  payload.leagues[0].matches[0].home.longName = 123;
+  deps.fetchMatches = async () => ({ ok: true, json: async () => payload });
+  assert.equal((await createMatchesHandler(deps)(event)).statusCode, 502);
+});
+
 for (const stage of ['open', 'write']) {
   test(`cache ${stage} failure still returns fresh matches`, async () => {
     const { deps } = fixture();
