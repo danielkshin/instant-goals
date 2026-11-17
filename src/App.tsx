@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import useLocalStorage from 'use-local-storage';
 import 'App.css';
 import { Header, ThemeButton, Matches, Error, Footer } from 'components';
@@ -7,9 +7,9 @@ const App = () => {
   const [error, setError] = useState(false);
   const [dark, setDark] = useLocalStorage('dark', false);
 
-  const displayError = () => {
+  const displayError = useCallback(() => {
     setError(true);
-  };
+  }, []);
 
   const changeTheme = () => {
     setDark(!dark);
