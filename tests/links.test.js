@@ -15,7 +15,7 @@ const listing = (...posts) => new Response(JSON.stringify({ data: { children: po
 
 for (const failedIndex of [0, 1, 2]) {
   test(`failure in source ${failedIndex + 1} preserves other sources`, async (t) => {
-    t.mock.method(console, 'error', () => {});
+    t.mock.method(console, 'error', () => { });
     let calls = 0;
     const result = await loadMatchLinks(match, async () => {
       const index = calls++;
@@ -29,7 +29,7 @@ for (const failedIndex of [0, 1, 2]) {
 }
 
 test('network, JSON and payload failures are contained and retry can succeed', async (t) => {
-  t.mock.method(console, 'error', () => {});
+  t.mock.method(console, 'error', () => { });
   let calls = 0;
   const result = await loadMatchLinks(match, async () => {
     calls++;
@@ -68,4 +68,24 @@ test('finished matches search both teams; upcoming matches make no requests', as
   const upcoming = await loadMatchLinks({ ...match, status: { ...match.status, started: false } }, fetcher);
   assert.equal(upcoming.requestCount, 0);
   assert.equal(calls, 2);
+});
+
+test('all source requests are in flight at the same time', async () => {
+  let inFlight = 0;
+  let maxInFlight = 0;
+  let release;
+  const gate = new Promise(resolve => { release = resolve; });
+  const timeout = setTimeout(() => release(), 200);
+  const result = await loadMatchLinks(match, async (url) => {
+    inFlight++;
+    maxInFlight = Math.max(maxInFlight, inFlight);
+    if (inFlight === 3) release();
+    await gate;
+    inFlight--;
+    return listing(post(url.length));
+  });
+  clearTimeout(timeout);
+  assert.equal(maxInFlight, 3);
+  assert.equal(result.requestCount, 3);
+  assert.equal(result.failures, 0);
 });
