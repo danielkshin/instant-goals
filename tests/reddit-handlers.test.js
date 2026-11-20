@@ -43,7 +43,7 @@ test('successful search and new listings return 200 with the listing', async () 
     assert.equal(response.statusCode, 200);
     assert.deepEqual(JSON.parse(response.body), listing);
   }
-  assert.ok(calls.api[1].url.endsWith('/r/soccer/new.json'));
+  assert.ok(calls.api[1].url.endsWith('/r/soccer/new.json?limit=100'));
 });
 
 const failures = {

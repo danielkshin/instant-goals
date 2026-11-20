@@ -81,4 +81,4 @@ export const createSearchHandler = (options) => createHandler((event) => {
   return `/r/soccer/search?${params}`;
 }, options);
 
-export const createNewHandler = (options) => createHandler(() => '/r/soccer/new.json', options);
+export const createNewHandler = (options) => createHandler(() => '/r/soccer/new.json?limit=100', options);
