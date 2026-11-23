@@ -12,8 +12,7 @@ export const filterLinks = (data: LinkData, match: MatchData): boolean => {
         (data.url.includes('/v/') ||
             data.url.includes('/c/') ||
             data.url.includes('v.redd.it') ||
-            data.url.includes('stream') ||
-            data.url.includes('goal')) &&
+            data.url.includes('stream')) &&
         // no crossposts
         !Object.prototype.hasOwnProperty.call(data, 'crosspost_parent') &&
         // posted during or after the game
